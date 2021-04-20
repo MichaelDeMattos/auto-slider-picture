@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from config import app_config, app_active 
-from flask import Flask, request, render_template
+from config import app_config, app_active
+from flask import Flask, request, render_template, flash
 
 # Application
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -22,11 +22,16 @@ def create_app(config_name):
     def index():
         if request.method == "POST":
             if 'file_post' not in request.files:
-                return 'there is no file1 in form!'
+                flash("There is no file in form!")
+                return render_template('index.html', notify="danger")
+
             post = request.files['file_post']
             path = os.path.join(app.config['UPLOAD_FOLDER'], post.filename)
             post.save(path)
-            return path
+            flash("Archive upload sucessfully")
+
+            return render_template("index.html", notify="primary")
+
         return render_template("index.html")
-    
+
     return app

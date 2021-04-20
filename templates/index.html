@@ -1,6 +1,16 @@
 {% extends 'base.html' %}
 
 {% block body %}
+
+{% with message = get_flashed_messages() %}
+{% if message %}
+<div class="notification is-{{ notify }}">
+    {{ message[0] }}
+    <button class="delete"></button>
+</div>
+{% endif %}
+{% endwith %}
+
 <h1>Upload new File</h1>
 <form method="post" enctype="multipart/form-data">
       <input type="file" name="file_post">
