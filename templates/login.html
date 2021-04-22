@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<footer class="footer is-mobile"
+        style="position: absolute; 
+               width: 300px; 
+               height: 350px; 
+               z-index: 15; 
+               top: 25%; 
+               left: 50%; 
+               margin: -100px 0 0  -150px;">
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+    <div class="notification is-{{ notify }}">
+        {{ message[0] }}
+        <button class="delete"></button>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <h1 class="title"
+        style="text-align: center;">
+        Login
+    </h1>
+    <form method="post" enctype="multipart/form-data" style="margin: 5px;">
+    <div class="field">
+        <label class="label">E-mail</label>
+        <div class="control">
+          <input name="inp_email" class="input" type="email" placeholder="Ex. your email" required>
+        </div>
+    </div>
+
+    <div class="field">
+        <label class="label">Password</label>
+        <div class="control">
+          <input name="inp_password" class="input" type="password" placeholder="***" required>
+        </div>
+    </div>
+
+      <button class="button is-info" 
+              type="submit"
+              style="margin: 5px;
+                    right: 35%;
+                    position: absolute;
+                    height: 40px;
+                    width: 100px;">
+            Submit
+    </button>
+
+    </form>
+</footer>
+
+
+{% endblock %}

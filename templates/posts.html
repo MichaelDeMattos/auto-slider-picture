@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<footer class="footer is-mobile"
+        style="position: absolute; 
+               width: 300px; 
+               height: 285px; 
+               z-index: 15; 
+               top: 25%; 
+               left: 50%; 
+               margin: -100px 0 0  -150px;">
+    {% with message = get_flashed_messages() %}
+    {% if message %}
+    <div class="notification is-{{ notify }}">
+        {{ message[0] }}
+        <button class="delete"></button>
+    </div>
+    {% endif %}
+    {% endwith %}
+    <h1 class="title">Upload new File</h1>
+    <form method="post" enctype="multipart/form-data" style="margin: 5px;">
+    <div class="field">
+        <label class="label">File description</label>
+        <div class="control">
+          <input name="inp_file_description" class="input" type="text" placeholder="Ex. this is file exemple" required>
+        </div>
+    </div>
+          
+    <div id="file-post-form" class="file has-name">
+        <label class="file-label">
+          <input class="file-input" type="file" name="file_post">
+          <span class="file-cta">
+            <span class="file-label">
+              Upload
+            </span>
+          </span>
+          <span class="file-name">
+            No file uploaded
+          </span>
+        </label>
+      </div>
+
+      <button class="button is-info" type="submit" style="margin: 5px; right: 35%; position: absolute; height: 40px; width: 100px;">Submit</button>
+
+    </form>
+</footer>
+
+
+{% endblock %}

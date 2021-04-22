@@ -1,3 +1,14 @@
+// Navbar Expand
+$(document).ready(function() {
+  // Check for click events on the navbar burger icon
+  $(".navbar-burger").click(function() {
+    // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
+    $(".navbar-burger").toggleClass("is-active");
+    $(".navbar-menu").toggleClass("is-active");
+  });
+});
+
+
 // Close notification
 document.addEventListener('DOMContentLoaded', () => {
   (document.querySelectorAll('.notification .delete') || []).forEach(($delete) => {
@@ -8,3 +19,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+
+// Select file 
+const fileInput = document.querySelector('#file-post-form input[type=file]');
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector('#file-post-form .file-name');
+      fileName.textContent = fileInput.files[0].name;
+    }
+}
+
