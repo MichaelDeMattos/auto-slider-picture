@@ -91,7 +91,10 @@ def create_app(config_name):
 
     @app.route("/view", methods=["GET"])
     def view():
-        return render_template("index.html")
+        images = []
+        for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
+            [images.append(row) for row in files]
+        return render_template("view.html", files=images)
 
     @app.route("/push_post")
     @login_required

@@ -5,7 +5,8 @@ import os
 class Config():
     SECRET_KEY = "\xbc\xe6ah2\xb0\xc8Z\x1d\xdf'f<\xfa&\xc1\x9eVz;\xad$I\xecW\x9eW\xbe\xbe\xc8\xcb\xb7"
     CSRF_ENABLED = True
-    UPLOAD_FOLDER = os.path.curdir+os.path.sep+'uploads'+os.path.sep
+    UPLOAD_FOLDER = UPLOAD_FOLDER = os.path.curdir+os.path.sep+'static'+os.path.sep+'uploads'+os.path.sep
+
 
 class DevelopmentConfig(Config):
     TESTING = True
