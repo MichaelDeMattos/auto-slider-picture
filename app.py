@@ -6,6 +6,7 @@ from flask import Flask, request, render_template, flash, redirect, url_for, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from resources.dowload import ControllerDownload
 
 # DataBase
 db = SQLAlchemy()
@@ -81,7 +82,14 @@ def create_app(config_name):
             return redirect(url_for('login'))
             
         login_user(user, remember=False)
-        return redirect(url_for('index'))
+        return redirect(url_for('admin'))
+
+    @app.route("/admin")
+    @login_required
+    def admin():
+        id_user = session["_user_id"]
+        user = User.query.filter_by(id=id_user).first()
+        return render_template("admin.html", user=user.name)
 
     @app.route("/logout")
     @login_required
@@ -92,6 +100,7 @@ def create_app(config_name):
     @app.route("/view", methods=["GET"])
     def view():
         images = []
+        ControllerDownload().get_download_img()
         for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
             [images.append(row) for row in files]
         return render_template("view.html", files=images)

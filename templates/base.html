@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %} {% endblock %}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.2/css/bulma.min.css">
-    <link rel="stylesheet" href="{{url_for('static', filename='css/index.css')}}">
     {% endblock %}
 </head>
 <body class="body">
@@ -28,6 +27,7 @@
             <a class="navbar-item" href="{{ url_for('login') }}"><strong>Login</strong></a>
             {% endif %}
             {% if current_user.is_authenticated %}
+            <a class="navbar-item" href="{{ url_for('admin') }}"><strong>Admin</strong></a>
             <a class="navbar-item" href="{{ url_for('push_post') }}"><strong>New Post</strong></a>            
             <a class="navbar-item" href="{{ url_for('logout') }}"><strong>Logout</strong></a>
             {% endif %}
