@@ -3,6 +3,71 @@
 {% block body %}
 <div class="box is-mobile">
   <p>Hello, <strong>{{ user }}</strong> !</p> 
-</div>
 
+<span style="margin: 5px;">
+  <h3 class="title is-3">Files</h3>
+
+<div class="table-container">
+<table class="table is-mobile">
+  <thead>
+    <tr style="background-color: gray;">
+      <th style="color: white;">
+        Id.
+      </th>
+      <th style="color: white;">
+        File name
+      </th>
+      <th style="color: white;">
+        Create date
+      </th>
+      <th style="color: white;">
+        User
+      </th>
+
+      <th style="color: white;">
+        Remove
+      </th>
+
+    </tr>
+  </thead>
+  <tfoot>
+    {% for file in files %}
+    <tr>
+      <th style="color: gray;">
+       {{ file['id'] }}
+      </th>
+      <th style="color: gray;">
+       {{ file['file_name'] }}
+      </th>
+      <th style="color: gray;">
+      {{ file['create_date'] }}
+      </th>
+      <th style="color: gray;">
+       {{ file['user_name'] }}
+      </th>
+      <th>
+        <button class="button
+                       is-small
+                       is-danger 
+                       is-outlined"
+                type="submit"
+                value="{{ file['id'] }}"
+                onclick="">
+          <span>
+            Delete
+          </span>
+          <span class="icon 
+                       is-small">
+           <img src="{{ url_for('static', filename='img/trash.ico') }}">
+          </span>
+        </button>
+      </th>
+    </tr>
+    {% endfor %}
+
+  </tfoot>
+</table>
+</div>
+</span>
+</div>
 {% endblock %}

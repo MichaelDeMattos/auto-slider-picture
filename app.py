@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
+from datetime import datetime
 from config import app_config, app_active
 from flask import Flask, request, render_template, flash, redirect, url_for, session
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
-from resources.dowload import ControllerDownload
 
 # DataBase
 db = SQLAlchemy()
@@ -38,6 +38,10 @@ def create_app(config_name):
     # Models
     from model.user import User
     from model.post import PostNews
+    from resources.dowload import ControllerDownload
+    from resources.util import format_datetime
+    from resources.user import ControllerUser
+    from resources.post import ControllerPostNews
     
     @login_manager.user_loader
     def load_user(cod_user):
@@ -87,9 +91,20 @@ def create_app(config_name):
     @app.route("/admin")
     @login_required
     def admin():
-        id_user = session["_user_id"]
-        user = User.query.filter_by(id=id_user).first()
-        return render_template("admin.html", user=user.name)
+        id_user_session = session["_user_id"]
+        posts = ControllerPostNews().get_posts()
+        _files = []
+        for row in posts:
+            _files.append({
+                "id": row.id, 
+                "file_name": row.file_name, 
+                "create_date": format_datetime(row.create_date),
+                "user_name": ControllerUser().get_user_by_id(row.user_id).split()[0],
+            })
+        return render_template(
+            "admin.html", 
+            user=ControllerUser().get_user_by_id(id_user_session),
+            files=_files)
 
     @app.route("/logout")
     @login_required
@@ -99,11 +114,8 @@ def create_app(config_name):
 
     @app.route("/view", methods=["GET"])
     def view():
-        images = []
         ControllerDownload().get_download_img()
-        for root, dirs, files in os.walk(app.config['UPLOAD_FOLDER']):
-            [images.append(row) for row in files]
-        return render_template("view.html", files=images)
+        return render_template("view.html", files=ControllerDownload().scrapy_dir_uploads())
 
     @app.route("/push_post")
     @login_required
