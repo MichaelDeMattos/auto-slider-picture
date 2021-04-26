@@ -16,3 +16,13 @@ class ControllerPostNews(object):
         except Exception as error:
             print("Error: ", str(error))
             return {"status": 500, "error": str(error)}
+    
+    def delete_post(self, file):
+        try:
+            db.session.query(PostNews).filter_by(file_name=file).delete()
+            db.session.commit()
+            return {"status": 200}
+
+        except Exception as error:
+            print("Error:", error)
+            return {"status": 500, "error": str(error)}

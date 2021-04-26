@@ -50,9 +50,10 @@
                        is-small
                        is-danger 
                        is-outlined"
+                id="btn_{{ file['id'] }}"
                 type="submit"
-                value="{{ file['id'] }}"
-                onclick="">
+                value="{{ file['file_name'] }}"
+                onclick="remove_post_file(this.id)">
           <span>
             Delete
           </span>

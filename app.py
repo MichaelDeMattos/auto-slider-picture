@@ -105,6 +105,23 @@ def create_app(config_name):
             "admin.html", 
             user=ControllerUser().get_user_by_id(id_user_session),
             files=_files)
+    
+    @app.route("/admin", methods=["POST"])
+    def admin_post():
+        file_name = request.form["file_name"]
+
+        if not file_name:
+            return "Name file if not exists", 404
+
+        file_path = os.path.join(app.config["UPLOAD_FOLDER"] + file_name)
+        os.remove(file_path)
+        delete = ControllerPostNews().delete_post(file_name)
+        
+        if delete["status"] == 500:
+            return "Name file if not exists", 404
+        
+        if delete["status"] == 200:
+            return "\nFile deleted sucessfully!!!", 200
 
     @app.route("/logout")
     @login_required

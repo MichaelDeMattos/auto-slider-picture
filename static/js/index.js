@@ -29,3 +29,27 @@ const fileInput = document.querySelector('#file-post-form input[type=file]');
     }
 }
 
+// Post remove file
+function remove_post_file(id){
+  var exclude = window.confirm("Confirm exclude file selected ?");
+  if (exclude) {
+    var file_name = document.getElementById(id).value;
+    $.ajax({
+          url: '/admin',
+          data: {"file_name": file_name},
+          type: 'POST',
+          success: function(response) {
+              alert("Sucess!" + response);
+              location.reload();
+          },
+          error: function(error) {
+              alert("Error: " + error);
+          }
+    }
+  );
+}
+
+  else {
+    console.log("canceled!!") 
+  }
+}
