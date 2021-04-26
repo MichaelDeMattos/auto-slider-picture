@@ -2,6 +2,7 @@
 
 import os
 from datetime import datetime
+from unicodedata import normalize
 
 """ This function return datetime formated for timezone pt-br """
 def format_datetime(date):
@@ -13,4 +14,8 @@ def format_datetime(date):
 def generate_secret_key():
     key = os.urandom(2** + 10)
     return key
+
+""" This function format text for ascci """
+def format_text_for_ascci(text):
+    return normalize('NFKD', text).encode('ASCII', 'ignore').decode('ASCII')
     

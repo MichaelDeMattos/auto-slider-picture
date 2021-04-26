@@ -38,8 +38,10 @@ def create_app(config_name):
     # Models
     from model.user import User
     from model.post import PostNews
+
+    # Resources
     from resources.dowload import ControllerDownload
-    from resources.util import format_datetime
+    from resources.util import format_datetime, format_text_for_ascci
     from resources.user import ControllerUser
     from resources.post import ControllerPostNews
     
@@ -66,7 +68,10 @@ def create_app(config_name):
             flash('Email address already exists')
             return redirect(url_for('login'))
 
-        new_user = User(email=email, name=name, password=generate_password_hash(password, method='sha256'))
+        new_user = User(email=email, 
+                        name=name, 
+                        password=generate_password_hash(password, method='sha256')
+                    )
         db.session.add(new_user)
         db.session.commit()
         return redirect(url_for('login'))
@@ -132,7 +137,10 @@ def create_app(config_name):
     @app.route("/view", methods=["GET"])
     def view():
         ControllerDownload().get_download_img()
-        return render_template("view.html", files=ControllerDownload().scrapy_dir_uploads())
+        return render_template("view.html", 
+            files=ControllerDownload().scrapy_dir_uploads(),
+            refresh_time=len(ControllerDownload().scrapy_dir_uploads() * 150)
+        )
 
     @app.route("/push_post")
     @login_required
@@ -152,12 +160,16 @@ def create_app(config_name):
             """ Register new Post file """
             _user_id = session["_user_id"]
             _filename = post.filename.replace(" ", "_")
-            new_post = PostNews(user_id=_user_id, file_name=_filename)
+            new_post = PostNews(user_id=_user_id,
+                file_name=format_text_for_ascci(_filename)
+            )
             db.session.add(new_post)
             db.session.commit()        
 
             """ Save file in path /uploads """
-            path = os.path.join(app.config['UPLOAD_FOLDER'], post.filename)
+            path = os.path.join(app.config['UPLOAD_FOLDER'],
+                format_text_for_ascci(post.filename).replace(" ", "_")
+            )
             post.save(path)
 
             """ Renderer response """ 

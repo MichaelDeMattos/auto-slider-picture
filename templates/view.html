@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<meta http-equiv="refresh" content="120">
+<meta http-equiv="refresh" content="{{ refresh_time }}">
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
@@ -8,24 +8,13 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 </head>
 <body>
-    <div id="carouselControls" class="carousel slide" data-ride="carousel">
+    <div data-interval="35000" id="carouselControls" class="carousel slide" data-ride="carousel">
         <div class="carousel-inner">
          {% for image in files %}
           <div class="carousel-item {% if loop.index == 1 %} active {% endif %}">
             <img class="d-block w-100" src="{{ url_for('static', filename='uploads/' + image) }}" alt="First slide">
           </div>
          {% endfor %}
-        </div>
-        <a class="carousel-control-prev" href="carouselControls" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="carouselControls" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-      
       <script>
           $('.carousel').carousel()
       </script>

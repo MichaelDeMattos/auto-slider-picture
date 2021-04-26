@@ -16,9 +16,7 @@ class ControllerDownload(object):
             if response.status_code == 200:
                 with open(os.path.join(Config.UPLOAD_FOLDER + 'file.png'), 'wb') as out_file:
                     out_file.write(response.content)
-            else:
-                pass
-
+                    
         except Exception as error:
             print("Error: ", str(error))
             return {"status": 500, "error": str(error)}
