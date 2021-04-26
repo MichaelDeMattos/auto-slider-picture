@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
 import os
+from resources.util import generate_secret_key
 
 class Config():
-    SECRET_KEY = "\xbc\xe6ah2\xb0\xc8Z\x1d\xdf'f<\xfa&\xc1\x9eVz;\xad$I\xecW\x9eW\xbe\xbe\xc8\xcb\xb7"
+    SECRET_KEY = generate_secret_key()
     CSRF_ENABLED = True
     UPLOAD_FOLDER = UPLOAD_FOLDER = os.path.curdir+os.path.sep+'static'+os.path.sep+'uploads'+os.path.sep
-
 
 class DevelopmentConfig(Config):
     TESTING = True
