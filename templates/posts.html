@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<footer class="footer is-mobile"
+<footer class="footer is-mobile is-light"
         style="position: absolute; 
                width: 300px; 
                height: 285px; 
@@ -17,12 +17,23 @@
     </div>
     {% endif %}
     {% endwith %}
-    <h1 class="title">Upload new File</h1>
+    <h1 class="title"
+        style="color: #003366;
+              font-family: Arial, Helvetica, sans-serif;">
+        Upload new File
+    </h1>
     <form method="post" enctype="multipart/form-data" style="margin: 5px;">
     <div class="field">
-        <label class="label">File description</label>
+        <label class="label"
+               style="color: #003366;
+                     font-family: Arial, Helvetica, sans-serif;">
+          File description</label>
         <div class="control">
-          <input name="inp_file_description" class="input" type="text" placeholder="Ex. this is file exemple" required>
+          <input name="inp_file_description"
+                 class="input" 
+                 type="text" 
+                 placeholder="Ex. this is file exemple"
+                 required>
         </div>
     </div>
           
@@ -30,11 +41,15 @@
         <label class="file-label">
           <input class="file-input" type="file" name="file_post" required>
           <span class="file-cta">
-            <span class="file-label">
+            <span class="file-label"
+                  style="color: #003366;
+                        font-family: Arial, Helvetica, sans-serif;">
               Upload
             </span>
           </span>
-          <span class="file-name">
+          <span class="file-name"
+                style="color: #003366;
+                      font-family: Arial, Helvetica, sans-serif;">
             No file uploaded
           </span>
         </label>

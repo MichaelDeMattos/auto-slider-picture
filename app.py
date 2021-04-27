@@ -114,13 +114,14 @@ def create_app(config_name):
     @app.route("/admin", methods=["POST"])
     def admin_post():
         file_name = request.form["file_name"]
+        user_id = session["_user_id"]
 
         if not file_name:
             return "Name file if not exists", 404
 
         file_path = os.path.join(app.config["UPLOAD_FOLDER"] + file_name)
+        delete = ControllerPostNews().delete_post(file_name, user_id)
         os.remove(file_path)
-        delete = ControllerPostNews().delete_post(file_name)
         
         if delete["status"] == 500:
             return "Name file if not exists", 404
@@ -139,7 +140,7 @@ def create_app(config_name):
         ControllerDownload().get_download_img()
         return render_template("view.html", 
             files=ControllerDownload().scrapy_dir_uploads(),
-            refresh_time=len(ControllerDownload().scrapy_dir_uploads() * 150)
+            refresh_time=len(ControllerDownload().scrapy_dir_uploads() * 35)
         )
 
     @app.route("/push_post")
@@ -156,15 +157,15 @@ def create_app(config_name):
                 return render_template('posts.html', notify="danger")
 
             post = request.files['file_post']
-
-            """ Register new Post file """
-            _user_id = session["_user_id"]
-            _filename = post.filename.replace(" ", "_")
-            new_post = PostNews(user_id=_user_id,
-                file_name=format_text_for_ascci(_filename)
+            
+            new_post = ControllerPostNews().new_post(
+                user_id=session["_user_id"],
+                file_name=post.filename,
             )
-            db.session.add(new_post)
-            db.session.commit()        
+
+            if new_post["status"] == 409 or new_post["status"] == 500:
+                flash(new_post["error"])
+                return render_template("posts.html", notify="danger") 
 
             """ Save file in path /uploads """
             path = os.path.join(app.config['UPLOAD_FOLDER'],

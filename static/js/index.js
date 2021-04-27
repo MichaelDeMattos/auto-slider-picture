@@ -39,7 +39,7 @@ function remove_post_file(id){
           data: {"file_name": file_name},
           type: 'POST',
           success: function(response) {
-              alert("Sucess!" + response);
+              alert("File deleted with sucessfully!");
               location.reload();
           },
           error: function(error) {

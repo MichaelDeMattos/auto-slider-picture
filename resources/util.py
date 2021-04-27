@@ -17,5 +17,5 @@ def generate_secret_key():
 
 """ This function format text for ascci """
 def format_text_for_ascci(text):
-    return normalize('NFKD', text).encode('ASCII', 'ignore').decode('ASCII')
+    return normalize('NFKD', text).encode('ASCII', 'ignore').decode('ASCII').replace(" ", "_")
     
