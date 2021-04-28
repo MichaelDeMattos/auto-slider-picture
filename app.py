@@ -7,6 +7,8 @@ from flask import Flask, request, render_template, flash, redirect, url_for, ses
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import LoginManager, login_user, login_required, logout_user, current_user
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate, MigrateCommand   
+from flask_script import Manager
 
 # DataBase
 db = SQLAlchemy()
@@ -26,18 +28,18 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile("config.py")
     app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
-    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://user:password@host:port/database"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     db.init_app(app)
-    
+ 
     # Login Manager
     login_manager = LoginManager()
     login_manager.login_view = "login"
     login_manager.init_app(app)
 
     # Models
-    from model.user import User
-    from model.post import PostNews
+    from model.user import UserDB
+    from model.post import PostNewsDB
 
     # Resources
     from resources.dowload import ControllerDownload
@@ -47,7 +49,7 @@ def create_app(config_name):
     
     @login_manager.user_loader
     def load_user(cod_user):
-        return User.query.get(int(cod_user))
+        return UserDB.query.get(int(cod_user))
 
     @app.route("/", methods=["GET"])
     def index():
@@ -63,12 +65,12 @@ def create_app(config_name):
         name = request.form.get('inp_name')
         password = request.form.get('inp_password')
 
-        user = User.query.filter_by(email=email).first()
+        user = UserDB.query.filter_by(email=email).first()
         if user:  
             flash('Email address already exists')
             return redirect(url_for('login'))
 
-        new_user = User(email=email, 
+        new_user = UserDB(email=email, 
                         name=name, 
                         password=generate_password_hash(password, method='sha256')
                     )
@@ -84,7 +86,7 @@ def create_app(config_name):
     def login_post():
         email = request.form.get("inp_email")
         password = request.form.get("inp_password")
-        user = User.query.filter_by(email=email).first()
+        user = UserDB.query.filter_by(email=email).first()
 
         if not user or not check_password_hash(user.password, password):
             flash('Please check your login details and try again.')
@@ -137,7 +139,7 @@ def create_app(config_name):
 
     @app.route("/view", methods=["GET"])
     def view():
-        ControllerDownload().get_download_img()
+        # ControllerDownload().get_download_img()
         return render_template("view.html", 
             files=ControllerDownload().scrapy_dir_uploads(),
             refresh_time=len(ControllerDownload().scrapy_dir_uploads() * 35)

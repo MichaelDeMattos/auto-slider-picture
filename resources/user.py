@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from model.user import User
+from model.user import UserDB
 
 """ This class content scripts for access table User """
 class ControllerUser(object):
@@ -9,7 +9,7 @@ class ControllerUser(object):
     
     def get_user_by_id(self, id_user):
         try:
-            user = User.query.filter_by(id=id_user).first()
+            user = UserDB.query.filter_by(id=id_user).first()
             return user.name
 
         except Exception as error:

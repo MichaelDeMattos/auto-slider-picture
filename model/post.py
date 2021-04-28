@@ -3,23 +3,23 @@
 from app import db
 from datetime import datetime
 
-class PostNews(db.Model):
-    __tablename__ = "postnews"
+class PostNewsDB(db.Model):
+    __tablename__ = "postnewsdb"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('userdb.id'))
     file_name = db.Column(db.String(500), nullable=False, unique=True)
     create_date = db.Column(db.DateTime, default=datetime.now())
     
-    user = db.relationship("User")
+    user = db.relationship("UserDB")
 
-class PostNewsLog(db.Model):
-    __tablename__ = "postnewslog"
+class PostNewsLogDB(db.Model):
+    __tablename__ = "postnewslogdb"
 
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    id = db.Column(db.Integer, primary_key=True, unique=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('userdb.id'))
     file_name = db.Column(db.String(500), nullable=False)
     create_date = db.Column(db.DateTime)
     deleted_date = db.Column(db.DateTime, default=datetime.now())
     
-    user = db.relationship("User")
+    user = db.relationship("UserDB")
