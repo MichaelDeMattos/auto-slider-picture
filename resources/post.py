@@ -39,7 +39,7 @@ class ControllerPostNews(object):
             return {"status": 500, "error": str(error)}
     
     """ Register new Post file """
-    def new_post(self, user_id, file_name):
+    def new_post(self, user_id, file_name, description, _type, sleep, screen):
         try:
             
             """ Check file_name if exists """
@@ -49,7 +49,11 @@ class ControllerPostNews(object):
 
             """ New Post"""
             new_post = PostNewsDB(user_id=user_id,
-                file_name=format_text_for_ascci(file_name)
+                file_name=format_text_for_ascci(file_name),
+                description=description,
+                type_file=_type,
+                sleep=sleep,
+                screen=screen
             )
             db.session.add(new_post)
             db.session.commit()

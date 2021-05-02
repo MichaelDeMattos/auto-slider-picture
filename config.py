@@ -7,6 +7,7 @@ class Config():
     SECRET_KEY = generate_secret_key()
     CSRF_ENABLED = True
     UPLOAD_FOLDER = UPLOAD_FOLDER = os.path.curdir+os.path.sep+'static'+os.path.sep+'uploads'+os.path.sep
+    BACKUP_FOLDER = BACKUP_FOLDER = os.path.curdir+os.path.sep+'static'+os.path.sep+'backup'+os.path.sep
 
 class DevelopmentConfig(Config):
     TESTING = True

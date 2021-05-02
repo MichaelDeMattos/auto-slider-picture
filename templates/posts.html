@@ -1,24 +1,35 @@
 {% extends 'base.html' %}
 
 {% block body %}
+{% with message = get_flashed_messages() %}
+<div style="position: absolute;
+           z-index: 15%;
+           width: 300px;
+           top: 8%;
+           left: 50%;
+           margin: -1px 0 0  -150px">
+  {% if message %}
+  <div class="notification is-{{ notify }}">
+    <p style="text-align: center;
+              font-family: Arial, Helvetica, sans-serif;">
+      {{ message[0] }}
+    </p>
+      <button class="delete"></button>
+  </div>
+  {% endif %}
+</div>
+{% endwith %}
 <footer class="footer is-mobile is-light"
         style="position: absolute; 
                width: 300px; 
-               height: 285px; 
+               height: 350px; 
                z-index: 15; 
                top: 25%; 
                left: 50%; 
-               margin: -100px 0 0  -150px;">
-    {% with message = get_flashed_messages() %}
-    {% if message %}
-    <div class="notification is-{{ notify }}">
-        {{ message[0] }}
-        <button class="delete"></button>
-    </div>
-    {% endif %}
-    {% endwith %}
-    <h1 class="title"
+               margin: -48px 0 0  -150px;">
+    <h1 class="title is-5"
         style="color: #003366;
+              text-align: center;
               font-family: Arial, Helvetica, sans-serif;">
         Upload new File
     </h1>
@@ -33,6 +44,32 @@
                  class="input" 
                  type="text" 
                  placeholder="Ex. this is file exemple"
+                 required>
+        </div>
+        <label class="label"
+               style="color: #003366;
+                     font-family: Arial, Helvetica, sans-serif;">
+          Sleep for slide</label>
+        <div class="control">
+          <input name="inp_sleep_slide"
+                 class="input" 
+                 type="number"
+                 min="1"
+                 max="300" 
+                 placeholder="Ex. 35"
+                 required>
+        </div>
+        <label class="label"
+               style="color: #003366;
+                     font-family: Arial, Helvetica, sans-serif;">
+          Screen</label>
+        <div class="control">
+          <input name="inp_screen"
+                 class="input" 
+                 type="number"
+                 min="1"
+                 max="300" 
+                 placeholder="Ex. 1"
                  required>
         </div>
     </div>
