@@ -1,23 +1,33 @@
 {% extends 'base.html' %}
 
 {% block body %}
+{% with message = get_flashed_messages() %}
+<div style="position: absolute;
+           z-index: 15%;
+           width: 300px;
+           top: 8%;
+           left: 50%;
+           margin: -1px 0 0  -150px">
+  {% if message %}
+  <div class="notification is-{{ notify }}">
+    <p style="text-align: center;
+              font-family: Arial, Helvetica, sans-serif;">
+      {{ message[0] }}
+    </p>
+      <button class="delete"></button>
+  </div>
+  {% endif %}
+</div>
+{% endwith %}
 <footer class="footer is-mobile"
-        style="position: absolute; 
+       style="position: absolute; 
                width: 300px; 
                height: 350px; 
                z-index: 15; 
-               top: 25%; 
+               top: 28%; 
                left: 50%; 
-               margin: -100px 0 0  -150px;">
-    {% with message = get_flashed_messages() %}
-    {% if message %}
-    <div class="notification is-{{ notify }}">
-        {{ message[0] }}
-        <button class="delete"></button>
-    </div>
-    {% endif %}
-    {% endwith %}
-    <h1 class="title"
+               margin: -48px 0 0  -150px;">
+    <h1 class="title is-5"
         style="text-align: center;
               color: #003366;
               font-family: Arial, Helvetica, sans-serif;">

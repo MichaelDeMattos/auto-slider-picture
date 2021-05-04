@@ -2,15 +2,17 @@
 
 {% block body %}
 <div class="box is-mobile">
-  <p>
+  <div class="title is-5"
+       style="color: #003366;
+             font-family: Arial, Helvetica, sans-serif;">
     Hello, <strong>{{ user }}</strong>!
-  </p> 
+  </div>
 
-<span style="margin: 5px;">
-  <h3 class="title is-3"
+<span style="margin: 6px;">
+  <h3 class="title is-5"
       style="color: #003366;
             font-family: Arial, Helvetica, sans-serif;">
-      Files
+      Posts actives
   </h3>
 
 <div class="table-container">
@@ -21,10 +23,10 @@
         Id.
       </th>
       <th style="color: white;">
-        File name
+        File
       </th>
       <th style="color: white;">
-        Create date
+        Create
       </th>
       <th style="color: white;">
         User

@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import magic
+import shutil
 from datetime import datetime
 from config import app_config, app_active
 from flask import Flask, request, render_template, flash, redirect, url_for, session
@@ -28,7 +30,8 @@ def create_app(config_name):
     app.config.from_object(app_config[config_name])
     app.config.from_pyfile("config.py")
     app.config['UPLOAD_FOLDER'] = config.UPLOAD_FOLDER
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://user:password@host:port/database"
+    # app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://user:password@host:port/database"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///db.sqlite"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     db.init_app(app)
 
@@ -63,8 +66,10 @@ def create_app(config_name):
     def singin_post():
         email = request.form.get('inp_email')
         name = request.form.get('inp_name')
+        alias_name = request.form.get('inp_alias_name')
         password = request.form.get('inp_password')
 
+<<<<<<< HEAD
         user = UserDB.query.filter_by(email=email).first()
         if user:
             flash('Email address already exists')
@@ -76,6 +81,21 @@ def create_app(config_name):
                     )
         db.session.add(new_user)
         db.session.commit()
+=======
+        user = ControllerUser().get_user_by_email(email=email)
+        if user:
+            flash('Email address already exists')
+            return render_template('singin.html', notify='danger')
+
+        new_user = ControllerUser().new_user(email=email,
+                                             name=name,
+                                             alias_name=alias_name,
+                                             password=generate_password_hash(password, method='sha256'))
+        if new_user["status"] == 500:
+            flash('Error in include new user!!!')
+            return render_template('singin.html', notify='danger')
+
+>>>>>>> origin/develop
         return redirect(url_for('login'))
 
     @app.route("/login")
@@ -86,11 +106,15 @@ def create_app(config_name):
     def login_post():
         email = request.form.get("inp_email")
         password = request.form.get("inp_password")
-        user = UserDB.query.filter_by(email=email).first()
+        user = ControllerUser().get_user_by_email(email=email)
 
         if not user or not check_password_hash(user.password, password):
             flash('Please check your login details and try again.')
+<<<<<<< HEAD
             return redirect(url_for('login'))
+=======
+            return render_template('login.html', notify='danger')
+>>>>>>> origin/develop
 
         login_user(user, remember=False)
         return redirect(url_for('admin'))
@@ -123,6 +147,9 @@ def create_app(config_name):
 
         file_path = os.path.join(app.config["UPLOAD_FOLDER"] + file_name)
         delete = ControllerPostNews().delete_post(file_name, user_id)
+        """ Backup file deleted """
+        shutil.copy(file_path, config.BACKUP_FOLDER)
+        """ Remove file this dir uploads """
         os.remove(file_path)
 
         if delete["status"] == 500:
@@ -159,21 +186,39 @@ def create_app(config_name):
                 return render_template('posts.html', notify="danger")
 
             post = request.files['file_post']
+<<<<<<< HEAD
+=======
+            description = request.form.get('inp_file_description')
+            sleep = int(request.form.get('inp_sleep_slide'))
+            screen = request.form.get('inp_screen')
+            """ Save file in path /uploads """
+            path = os.path.join(app.config['UPLOAD_FOLDER'],
+                format_text_for_ascci(post.filename).replace(" ", "_")
+            )
+            post.save(path)
+>>>>>>> origin/develop
 
             new_post = ControllerPostNews().new_post(
                 user_id=session["_user_id"],
                 file_name=post.filename,
+                description=description,
+                _type=magic.from_file(path, mime=True),
+                sleep=sleep,
+                screen=screen
             )
 
             if new_post["status"] == 409 or new_post["status"] == 500:
                 flash(new_post["error"])
                 return render_template("posts.html", notify="danger")
+<<<<<<< HEAD
 
             """ Save file in path /uploads """
             path = os.path.join(app.config['UPLOAD_FOLDER'],
                 format_text_for_ascci(post.filename).replace(" ", "_")
             )
             post.save(path)
+=======
+>>>>>>> origin/develop
 
             """ Renderer response """
             flash("Archive upload sucessfully")

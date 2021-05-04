@@ -4,3 +4,4 @@
 *uploads
 *.sqlite
 teste.py
+*backup
