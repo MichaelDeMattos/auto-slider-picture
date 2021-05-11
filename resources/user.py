@@ -39,3 +39,32 @@ class ControllerUser(object):
         except Exception as error:
             print("Error: ", str(error))
             return {"status": 500, "error": str(error)}
+    
+    def new_generate_recovery_code(self, code, email):
+        try:
+            new_code = UserDB.query.filter_by(email=email).first()
+            
+            if new_code:
+                new_code.code_recovery = code
+                db.session.add(new_code)
+                db.session.commit()
+                return {"status": 200}
+
+            if not new_code:
+                return {"status": 404}
+
+        except Exception as error:
+            print("Error: ", str(error))
+            return {"status": 500, "error": str(error)}
+    
+    def get_recovery_code_by_email(self, email):
+        try:
+            code = UserDB.query.filter_by(email=email).first()
+            if code:
+                return code.code_recovery
+            else:
+                return None
+
+        except Exception as error:
+            print("Error: ", str(error))
+            return {"status": 500, "error": str(error)}

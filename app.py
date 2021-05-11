@@ -46,9 +46,10 @@ def create_app(config_name):
 
     # Resources
     from resources.dowload import ControllerDownload
-    from resources.util import format_datetime, format_text_for_ascci
+    from resources.util import format_datetime, format_text_for_ascci, generate_recovery_code
     from resources.user import ControllerUser
     from resources.post import ControllerPostNews
+    from resources.email import SendEmail
 
     @login_manager.user_loader
     def load_user(cod_user):
@@ -100,6 +101,32 @@ def create_app(config_name):
 
         login_user(user, remember=False)
         return redirect(url_for('admin'))
+    
+    @app.route("/recovery", methods=["GET"])
+    def recovery():
+        return render_template("recovery.html")
+    
+    @app.route("/recovery", methods=["POST"])
+    def recovery_post():
+        email = request.form.get("inp_email")
+        new_recovery = ControllerUser().new_generate_recovery_code(
+            code=generate_recovery_code(),
+            email=email
+        )
+
+        if new_recovery["status"] == 200:
+            code = ControllerUser().get_recovery_code_by_email(email=email)
+            SendEmail().create_thread(email, code)
+            flash("I checked the code in your email")
+            return render_template("recovery.html", notify="primary")
+        
+        if new_recovery["status"] == 404:
+            flash("Acount not exists")
+            return render_template("recovery.html", notify="danger")
+
+        if new_recovery["status"] == 500:
+            flash("Error: %s" % new_recovery["error"])
+            return render_template("recovery.html", notify="danger")
 
     @app.route("/admin")
     @login_required
