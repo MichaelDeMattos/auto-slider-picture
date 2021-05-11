@@ -69,19 +69,6 @@ def create_app(config_name):
         alias_name = request.form.get('inp_alias_name')
         password = request.form.get('inp_password')
 
-<<<<<<< HEAD
-        user = UserDB.query.filter_by(email=email).first()
-        if user:
-            flash('Email address already exists')
-            return redirect(url_for('login'))
-
-        new_user = UserDB(email=email,
-                        name=name,
-                        password=generate_password_hash(password, method='sha256')
-                    )
-        db.session.add(new_user)
-        db.session.commit()
-=======
         user = ControllerUser().get_user_by_email(email=email)
         if user:
             flash('Email address already exists')
@@ -95,7 +82,6 @@ def create_app(config_name):
             flash('Error in include new user!!!')
             return render_template('singin.html', notify='danger')
 
->>>>>>> origin/develop
         return redirect(url_for('login'))
 
     @app.route("/login")
@@ -110,11 +96,7 @@ def create_app(config_name):
 
         if not user or not check_password_hash(user.password, password):
             flash('Please check your login details and try again.')
-<<<<<<< HEAD
-            return redirect(url_for('login'))
-=======
             return render_template('login.html', notify='danger')
->>>>>>> origin/develop
 
         login_user(user, remember=False)
         return redirect(url_for('admin'))
@@ -186,8 +168,6 @@ def create_app(config_name):
                 return render_template('posts.html', notify="danger")
 
             post = request.files['file_post']
-<<<<<<< HEAD
-=======
             description = request.form.get('inp_file_description')
             sleep = int(request.form.get('inp_sleep_slide'))
             screen = request.form.get('inp_screen')
@@ -196,7 +176,6 @@ def create_app(config_name):
                 format_text_for_ascci(post.filename).replace(" ", "_")
             )
             post.save(path)
->>>>>>> origin/develop
 
             new_post = ControllerPostNews().new_post(
                 user_id=session["_user_id"],
@@ -210,15 +189,6 @@ def create_app(config_name):
             if new_post["status"] == 409 or new_post["status"] == 500:
                 flash(new_post["error"])
                 return render_template("posts.html", notify="danger")
-<<<<<<< HEAD
-
-            """ Save file in path /uploads """
-            path = os.path.join(app.config['UPLOAD_FOLDER'],
-                format_text_for_ascci(post.filename).replace(" ", "_")
-            )
-            post.save(path)
-=======
->>>>>>> origin/develop
 
             """ Renderer response """
             flash("Archive upload sucessfully")
