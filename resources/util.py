@@ -24,6 +24,6 @@ def format_text_for_ascci(text):
 """ This function genetare aleatory recovery code """
 def generate_recovery_code():
     letters = string.ascii_lowercase
-    code = ''.join(random.choice(letters) for i in range(25))
+    code = ''.join(random.choice(letters) for i in range(5))
     return code
     

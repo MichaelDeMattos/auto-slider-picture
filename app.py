@@ -118,7 +118,7 @@ def create_app(config_name):
             code = ControllerUser().get_recovery_code_by_email(email=email)
             SendEmail().create_thread(email, code)
             flash("I checked the code in your email")
-            return render_template("recovery.html", notify="primary")
+            return redirect(url_for("reset_password"))
         
         if new_recovery["status"] == 404:
             flash("Acount not exists")
@@ -127,6 +127,43 @@ def create_app(config_name):
         if new_recovery["status"] == 500:
             flash("Error: %s" % new_recovery["error"])
             return render_template("recovery.html", notify="danger")
+    
+    @app.route("/reset_password", methods=["GET"])
+    def reset_password():
+        return render_template("reset_password.html")
+    
+    @app.route("/reset_password", methods=["POST"])
+    def reset_password_post():
+        email = request.form.get("inp_email")
+        recovery_code = request.form.get("inp_recovery_code")
+        new_password = request.form.get("inp_new_password")
+        recovery_code_db = ControllerUser().get_recovery_code_by_email(email)
+        
+        if not recovery_code_db:
+            flash("Acount not exists")
+            return redirect(url_for("reset_password", notify="danger"))
+
+        if recovery_code == recovery_code_db:
+            update_password = ControllerUser().update_password_by_email(
+                email=email,
+                new_password=generate_password_hash(new_password, method='sha256')
+            )
+
+            if update_password["status"] == 200:
+                flash("Password update sucessfully!")
+                return redirect(url_for("login", notify="primary"))
+            
+            if update_password["status"] == 404:
+                flash("Acount not exists")
+                return redirect(url_for("reset_password", notify="danger"))
+            
+            if update_password["status"] == 500:
+                flash("Error: %s" % update_password["error"])
+                return redirect(url_for("reset_password", notify="danger"))
+
+        else:
+            flash("Recovery code not equal")
+            return redirect(url_for("reset_password", notify="danger"))
 
     @app.route("/admin")
     @login_required

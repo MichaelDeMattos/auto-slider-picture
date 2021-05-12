@@ -68,3 +68,20 @@ class ControllerUser(object):
         except Exception as error:
             print("Error: ", str(error))
             return {"status": 500, "error": str(error)}
+    
+    def update_password_by_email(self, email, new_password):
+        try:
+            user_password_update = UserDB.query.filter_by(email=email).first()
+            if user_password_update:
+                user_password_update.password = new_password
+                user_password_update.code_recovery = ""
+                db.session.add(user_password_update)
+                db.session.commit()
+                return {"status": 200}
+            
+            if not user_password_update:
+                return {"status": 404}
+
+        except Exception as error:
+            print("Error: ", str(error))
+            return {"status": 500, "error": str(error)}
