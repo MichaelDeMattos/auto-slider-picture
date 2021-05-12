@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
+import string
+import random
 from datetime import datetime
 from unicodedata import normalize
 
@@ -18,4 +20,10 @@ def generate_secret_key():
 """ This function format text for ascci """
 def format_text_for_ascci(text):
     return normalize('NFKD', text).encode('ASCII', 'ignore').decode('ASCII').replace(" ", "_")
+
+""" This function genetare aleatory recovery code """
+def generate_recovery_code():
+    letters = string.ascii_lowercase
+    code = ''.join(random.choice(letters) for i in range(5))
+    return code
     
