@@ -1,7 +1,6 @@
 *.vscode
 *.pyc
 *__pycache__
-*uploads
 *.sqlite
 teste.py
 *backup
